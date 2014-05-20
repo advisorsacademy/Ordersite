@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Forms by advisorsacademy</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script type="text/javascript" src="javascripts/jquery-1.11.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#submit_btn").click(function() { 
+            //get input field values
+            
+            var user_fname          = $('input[name=fname]').val();
+            var user_lname          = $('input[name=lname]').val();
+            //var user_email          = $('input[name=email]').val();
+            var attach_logo         = $('input[name=logo]')[0].files[0];
+            var user_socialmedia    = $('textarea[name=socialMedia]').val();
+            var attach_interactive  = $('input[name=logo]')[0].files[0];
+            var user_content        = $('textarea[name=content]').val();
+            var user_videos         = $('textarea[name=videos]').val();
+            var user_webinfo        = $('textarea[name=webInfo]').val();
+            
+            console.log('First name is ' +user_fname+ ' and last name is ' +user_lname+ '!');
+            console.log('Email: ' +user_socialmedia+ ' \n');
+            
+            //simple validation at client's end
+            //we simply change border color to red if empty field using .css()
+            var proceed = true;
+            if(user_fname==""){ 
+                $('input[name=fname]').css({'border-color': 'red', 'border-width': '2px'});
+                proceed = false;
+            }
+            if(user_lname==""){ 
+                $('input[name=lname]').css({'border-color': 'red', 'border-width': '2px'});
+                proceed = false;
+            }
+            if(user_socialmedia=="") {    
+                $('textarea[name=socialMedia]').css({'border-color': 'red', 'border-width': '2px'});
+                proceed = false;
+            }
+            if(user_videos=="") {    
+                $('textarea[name=videos]').css({'border-color': 'red', 'border-width': '2px'});
+                proceed = false;
+            }
+            if(user_content=="") {  
+                $('textarea[name=content]').css({'border-color': 'red', 'border-width': '2px'});
+                proceed = false;
+            }
+            if(user_webinfo=="") {
+                $('textarea[name=webInfo]').css({'border-color': 'red', 'border-width': '2px'}); 
+                proceed = false;  
+            }
+
+            //everything looks good! proceed...
+            if(proceed) 
+            {
+                $(".loading-img").show(); //show loading image
+                $(".submit_btn").hide(); //hide submit button
+
+                //data to be sent to server			
+                var post_data = new FormData();    
+                post_data.append( 'userFname', user_fname );
+                post_data.append( 'userLname', user_lname );
+                post_data.append( 'userEmail', user_email );
+                post_data.append( 'userLogo', attach_logo );
+                post_data.append( 'userSocialmedia', user_socialmedia);
+                post_data.append( 'userInteractive', attach_interactive );
+                post_data.append( 'userContent', user_content );
+                post_data.append( 'userVideos', user_videos );
+                post_data.append( 'userWebinfo', user_webinfo );
+
+                //instead of $.post() we are using $.ajax()
+                //that's because $.ajax() has more options and can be used more flexibly.
+                $.ajax({
+                  url: 'contact_me.php',
+                  data: post_data,
+                  processData: false,
+                  contentType: false,
+                  type: 'POST',
+                  dataType:'json',
+                  success: function(data){
+                        //load json data from server and output message     
+                        if(data.type == 'error')
+                        {
+                            output = '<div class="error">'+data.text+'</div>';
+                        }else{
+                            output = '<div class="success">'+data.text+'</div>';
+
+                            //reset values in all input fields
+                            $('#contact_form input').val(''); 
+                            $('#contact_form textarea').val(''); 
+                        }
+
+                        $("#result").hide().html(output).slideDown(); //show results from server
+                        $(".loading-img").hide(); //hide loading image
+                        $(".submit_btn").show(); //show submit button
+                  }
+                });
+
+            }
+        });
+
+        //reset previously set border colors and hide all message on .keyup()
+        $("#contact_form input, #contact_form textarea").keyup(function() { 
+            $("#contact_form input, #contact_form textarea").css({ 'border-color':'#aaa', 'border-width':'1px' }); 
+            $("#result").slideUp();
+        });
+
+    });
+    </script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="hidden">Advisor's Academy</h1>
+        <img class="logo" src="img/logo.png" alt="Advisor's Academy" />
+        <p>Form for promotional site</p>
+
+        <p class="view"><a href="http://advisorsacademy.com">Visit our website <small>advisorsacademy.com</small></a></p>
+
+        
+        <!--<ul>
+          <li><a href="https://github.com/advisorsacademy/Forms/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/advisorsacademy/Forms/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/advisorsacademy/Forms">View On <strong>GitHub</strong></a></li>
+        </ul>
+        -->
+      </header>
+      <section>
+        <h3>Enter the following information below</h3>
+        <fieldset id="contact_form">
+            <label  for="fname">
+                <span>First Name:</span>
+                <input type="text" name="fname" placeholder="Ex. John" required />
+            </label> 
+            <label  for="lname">
+                <span>Last Name:</span>
+                <input type="text" name="lname" placeholder="Ex. Doe" required />
+            </label>
+            <label for="logo" class="upload">
+                <span>Please upload your logo:</span>
+                <input type="file" name="logo" id="logo" accept="image/*" />
+            </label>
+            <label for="socialMedia">
+                <span>Social Media Login credentials</span>
+                <textarea placeholder="Ex. Facebook = Username: johndoe@email.com / Password: abc123" name="socialMedia"></textarea>
+            </label>
+            <label for="interactive" class="upload">
+                <span>Please choose 5 to 7 interactive photos:</span>
+                <input type="file" id="interactive" name="interactive" accept="image/*" multiple />
+            </label>
+            <label for="content">
+                <span>Content for Tabs <span class="gold">(Home, About Us, Events, News, Resource Library, Contact Us)</span></span>
+                <br />
+                <textarea placeholder="Information and text for each page" id="content" name="content"></textarea>
+            </label>
+            <label for="videos">
+                <span>Intro/Outros for videos for funnel <span class="gold">(Schedule a time to shoot in FL office)</span></span>
+                <br />
+                <textarea placeholder="Ex. I am available June 2nd through June 5th" id="videos" name="videos"></textarea>
+            </label>
+            <label for="webInfo">
+                <span>Current website login information/admin rights to be able to access current content <span class="gold">(If not able to provide must supply all material necessary for site)</span></span>
+                <br />
+                <textarea placeholder="Ex. Wordpress admin information" id="webInfo" name="webInfo"></textarea>
+            </label>
+            <blockquote>&#42; Once all the items are received you will receive a draft website link within 4 weeks, and only allowed 2 edits before final site is set live.</blockquote>
+
+            <small class="disclaimer">To be eligible for a turn-key Lead Gen website, you will need to be FI/SAFE  certified.  All contracts must be with Advisors’ Academy – you must have 5 M+ in production or be on track for 5M.  You must have attended at least 3 Academies and been an AA Advisor for 9-12 months.  Any deviation from this eligibility will be decided by management on a case by case basis.  </small>
+            <img src="ajax-loader.gif" class="loading-img" style="display:none">
+            <button type="submit" class="button submit_btn" name="submit" id="submit_btn">Submit</button>
+            
+        </fieldset>
+            
+      
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/advisorsacademy">advisorsacademy</a></p>
+        <p><small>Hosted on GitHub Pages</small></p>
+      </footer>
+    </div>
+      
+    <script src="javascripts/scale.fix.js"></script>
+    <script type="text/javascript" src="javascripts/jquery-1.11.0.min.js"></script>
+  </body>
+</html>
