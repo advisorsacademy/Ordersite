@@ -34,7 +34,7 @@ if($_POST)
 	
     
     //Email
-    $user_Message = '
+    $user_Message = '<html><body>
     <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;"><tbody><tr><td align="center" bgcolor="#ffffff" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
 							<img src="http://advisors-academy.com/wp-content/uploads/logo.png" alt="Advisor\'s Academy Logo" width="300" height="138" style="display: block; background: #ffffff;"></td>
 					</tr><tr><td bgcolor="#FAEDDC" style="padding: 40px 30px 40px 30px;">
@@ -94,7 +94,7 @@ if($_POST)
 												</td>
 											</tr></tbody></table></td>
 								</tr></tbody></table></td>
-					</tr></tbody></table>';
+					</tr></tbody></table> </body></html>';
     
 	//additional php validation
 	if(strlen($user_Fname)<2) // If length is less than 2 it will throw an HTTP error.
