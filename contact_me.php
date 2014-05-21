@@ -34,9 +34,15 @@ if($_POST)
 	
     
     //Email
-    $user_Message = '<html><body>
+    $user_Message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Advisor&rsquo;s Academy Website Order Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head><body>
     <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;"><tbody><tr><td align="center" bgcolor="#ffffff" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
-							<img src="http://advisors-academy.com/wp-content/uploads/logo.png" alt="Advisor\'s Academy Logo" width="300" height="138" style="display: block; background: #ffffff;"></td>
+							<img src="http://advisors-academy.com/wp-content/uploads/logo.png" alt="Advisor&rsquo;s Academy Logo" width="300" height="138" style="display: block; background: #ffffff;"></td>
 					</tr><tr><td bgcolor="#FAEDDC" style="padding: 40px 30px 40px 30px;">
 							<table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td style="color: #153643; font-family: Arial, sans-serif; font-size: 24px;">
 										<b>Website Order from '.$user_Fname.' '.$user_Lname.'!</b>
@@ -80,7 +86,7 @@ if($_POST)
 								</tr></tbody></table></td>
 					</tr><tr><td bgcolor="#ee4c50" style="padding: 30px 30px 30px 30px;">
 							<table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;">
-								&reg; Advisor\'s Academy 2014<br><a href="javascript:void(0);" style="color: #ffffff;" onclick="$Widgets.Email.Message.evMoveToAnchor(this);" _anchor="#"><font color="#ffffff">Visit</font></a> our website
+								&reg; Advisor&rsquo;s Academy 2014<br><a href="javascript:void(0);" style="color: #ffffff;" onclick="$Widgets.Email.Message.evMoveToAnchor(this);" _anchor="#"><font color="#ffffff">Visit</font></a> our website
 									</td>
 									<td align="right">
 										<table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
