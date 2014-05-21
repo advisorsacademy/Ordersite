@@ -26,8 +26,7 @@
             var user_videos         = $('textarea[name=videos]').val();
             var user_webinfo        = $('textarea[name=webInfo]').val();
             
-            console.log('First name is ' +user_fname+ ' and last name is ' +user_lname+ '!');
-            console.log('Email: ' +user_socialmedia+ ' \n');
+            
             $(".loading-img").show(); //show loading image
                 $(".submit_btn").hide(); //hide submit button
             //simple validation at client's end
@@ -83,7 +82,7 @@
                                 alert('Requested page not found. [404]');
                             } else if (jqXHR.status == 500) {
                                 alert('Internal Server Error [500].' + jqXHR.responseText);
-                                console.log(jqXHR.responseText);
+                                //console.log(jqXHR.responseText);
                             } else if (exception === 'parsererror') {
                                 alert('Requested JSON parse failed.' + jqXHR.responseText);
                             } else if (exception === 'timeout') {
@@ -105,7 +104,6 @@
                   dataType:'json',
                   success: function(data){
                         //load json data from server and output message
-                        console.log(window.FileList[0]);
                         if(data.type == 'error')
                         {
                             output = '<div class="error">'+data.text+'</div>';
@@ -116,7 +114,6 @@
                             //reset values in all input fields
                             $('#contact_form input').val(''); 
                             $('#contact_form textarea').val(''); 
-                            
                         }
                         
                         $("html, body").animate({ scrollTop: 0 }, "slow"); //scroll to top of page
@@ -131,7 +128,7 @@
 
         //reset previously set border colors and hide all message on .keyup()
         $("#contact_form input, #contact_form textarea").keyup(function() { 
-            $("#contact_form input, #contact_form textarea").css('border-color','#aaa'); 
+            $("#contact_form input, #contact_form textarea").css({'border-color': '#aaa', 'border-width': '1px'}); 
             $("#result").slideUp();
         });
 

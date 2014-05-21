@@ -182,9 +182,8 @@ if($_POST)
 		# Mail headers should work with most clients (including thunderbird)
 		$headers = "MIME-Version: 1.0\r\n";
 		$headers .= "X-Mailer: PHP/" . phpversion()."\r\n";
-        $headers .= "From: Advisor's Site Order Form\r\n";
+        $headers .= "From: websiteForm@advisorsacademy.com\r\n";
 		$headers .= "Subject:".$subject."\r\n";
-		//$headers .= "Reply-To: ".$user_Email."" . "\r\n";
         $headers .= "Reply-To: cstubbs@advisorsacademy.com\r\n";
 		$headers .= "Content-Type: multipart/mixed; boundary=".md5('boundary1')."\r\n\r\n";
 	
