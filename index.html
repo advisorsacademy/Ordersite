@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <script type="text/javascript" src="javascripts/jquery-1.11.0.min.js"></script>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -19,17 +20,16 @@
             
             var user_fname          = $('input[name=fname]').val();
             var user_lname          = $('input[name=lname]').val();
-            //var user_email          = $('input[name=email]').val();
-            var attach_logo         = $('input[name=logo]')[0].files[0];
+            var attach_file         = $('input[name=fileAttach]')[0].files[0];
             var user_socialmedia    = $('textarea[name=socialMedia]').val();
-            var attach_interactive  = $('input[name=logo]')[0].files[0];
             var user_content        = $('textarea[name=content]').val();
             var user_videos         = $('textarea[name=videos]').val();
             var user_webinfo        = $('textarea[name=webInfo]').val();
             
             console.log('First name is ' +user_fname+ ' and last name is ' +user_lname+ '!');
             console.log('Email: ' +user_socialmedia+ ' \n');
-            
+            $(".loading-img").show(); //show loading image
+                $(".submit_btn").hide(); //hide submit button
             //simple validation at client's end
             //we simply change border color to red if empty field using .css()
             var proceed = true;
@@ -63,21 +63,39 @@
             {
                 $(".loading-img").show(); //show loading image
                 $(".submit_btn").hide(); //hide submit button
-
                 //data to be sent to server			
                 var post_data = new FormData();    
                 post_data.append( 'userFname', user_fname );
                 post_data.append( 'userLname', user_lname );
-                post_data.append( 'userEmail', user_email );
-                post_data.append( 'userLogo', attach_logo );
+                post_data.append( 'userFile', attach_file );
                 post_data.append( 'userSocialmedia', user_socialmedia);
-                post_data.append( 'userInteractive', attach_interactive );
                 post_data.append( 'userContent', user_content );
                 post_data.append( 'userVideos', user_videos );
                 post_data.append( 'userWebinfo', user_webinfo );
-
                 //instead of $.post() we are using $.ajax()
                 //that's because $.ajax() has more options and can be used more flexibly.
+                $(function() {
+                    $.ajaxSetup({
+                        error: function(jqXHR, exception) {
+                            if (jqXHR.status === 0) {
+                                alert('Not connect.\n Verify Network.');
+                            } else if (jqXHR.status == 404) {
+                                alert('Requested page not found. [404]');
+                            } else if (jqXHR.status == 500) {
+                                alert('Internal Server Error [500].' + jqXHR.responseText);
+                                console.log(jqXHR.responseText);
+                            } else if (exception === 'parsererror') {
+                                alert('Requested JSON parse failed.' + jqXHR.responseText);
+                            } else if (exception === 'timeout') {
+                                alert('Time out error.');
+                            } else if (exception === 'abort') {
+                                alert('Ajax request aborted.');
+                            } else {
+                                alert('Uncaught Error.\n' + jqXHR.responseText);
+                            }
+                        }
+                    });
+                });
                 $.ajax({
                   url: 'contact_me.php',
                   data: post_data,
@@ -86,18 +104,22 @@
                   type: 'POST',
                   dataType:'json',
                   success: function(data){
-                        //load json data from server and output message     
+                        //load json data from server and output message
+                        console.log(window.FileList[0]);
                         if(data.type == 'error')
                         {
                             output = '<div class="error">'+data.text+'</div>';
+                            console.log("Error " + output);
                         }else{
                             output = '<div class="success">'+data.text+'</div>';
-
+                            console.log("Success " + output);
                             //reset values in all input fields
                             $('#contact_form input').val(''); 
                             $('#contact_form textarea').val(''); 
+                            
                         }
-
+                        
+                        $("html, body").animate({ scrollTop: 0 }, "slow"); //scroll to top of page
                         $("#result").hide().html(output).slideDown(); //show results from server
                         $(".loading-img").hide(); //hide loading image
                         $(".submit_btn").show(); //show submit button
@@ -109,7 +131,7 @@
 
         //reset previously set border colors and hide all message on .keyup()
         $("#contact_form input, #contact_form textarea").keyup(function() { 
-            $("#contact_form input, #contact_form textarea").css({ 'border-color':'#aaa', 'border-width':'1px' }); 
+            $("#contact_form input, #contact_form textarea").css('border-color','#aaa'); 
             $("#result").slideUp();
         });
 
@@ -117,6 +139,15 @@
     </script>
   </head>
   <body>
+    <!-- Modal for zip help -->
+    <div class="modal">
+        <button class="close toggleModal">Close</button>
+        
+        <h3>Create a Zip</h3>
+        <p>Place all of the images you want to send into a folder. Once all images are in place, right click on the folder and go to "Send to" and click Compressed. This will create a zip file with all the images and you can attach this file.</p>
+        <img src="img/compress.png" alt="Compress Example Image" />
+    </div>
+      
     <div class="wrapper">
       <header>
         <h1 class="hidden">Advisor's Academy</h1>
@@ -136,6 +167,7 @@
       <section>
         <h3>Enter the following information below</h3>
         <fieldset id="contact_form">
+            <div id="result"></div>
             <label  for="fname">
                 <span>First Name:</span>
                 <input type="text" name="fname" placeholder="Ex. John" required />
@@ -144,18 +176,22 @@
                 <span>Last Name:</span>
                 <input type="text" name="lname" placeholder="Ex. Doe" required />
             </label>
-            <label for="logo" class="upload">
-                <span>Please upload your logo:</span>
-                <input type="file" name="logo" id="logo" accept="image/*" />
+            <label for="" class="upload"><!-- File Upload -->
+                <span>Please upload a zip file of your logo and 5-7 interactive photos:</span>
+                <span class="gold">Click "Help" to learn how to create the zip</span>
+                <button class="toggleModal">Help</button>
+                <input type="file" name="fileAttach" id="fileAttach"  />
             </label>
             <label for="socialMedia">
-                <span>Social Media Login credentials</span>
+                <span>Social Media Login Credentials</span>
                 <textarea placeholder="Ex. Facebook = Username: johndoe@email.com / Password: abc123" name="socialMedia"></textarea>
             </label>
+<!--
             <label for="interactive" class="upload">
                 <span>Please choose 5 to 7 interactive photos:</span>
                 <input type="file" id="interactive" name="interactive" accept="image/*" multiple />
             </label>
+-->
             <label for="content">
                 <span>Content for Tabs <span class="gold">(Home, About Us, Events, News, Resource Library, Contact Us)</span></span>
                 <br />
@@ -189,5 +225,13 @@
       
     <script src="javascripts/scale.fix.js"></script>
     <script type="text/javascript" src="javascripts/jquery-1.11.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+          $('.toggleModal').on('click', function(e) {
+            $('body').toggleClass('prevent');
+            $('.modal').toggleClass('active');
+          });
+        });  
+    </script>
   </body>
 </html>

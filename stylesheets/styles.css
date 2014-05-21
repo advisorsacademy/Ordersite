@@ -198,11 +198,6 @@ label {
     margin: 30px 0px;
     display:block;
 }
-    label.upload input {
-        border: 1px solid #aaa;
-        display: block;
-        padding: 1em;
-    }
 input {
     border: 1px solid #aaa;
     padding: 10px;
@@ -346,4 +341,102 @@ span.gold {
 
 .input-fail {
     border-color: red; border-width: 2px;
+}
+
+.success{
+	background: #CFFFF5;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #B9ECCE;
+	border-radius: 5px;
+	font-weight: normal;
+}
+.error{
+	background: #FFDFDF;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #FFCACA;
+	border-radius: 5px;
+	font-weight: normal;
+}
+
+.MultiFile-wrap {
+    padding: 10px;
+    border: 1px solid #AAA;
+    width: 320px;
+}
+.MultiFile-label {
+    background: rgb(161,255,192);
+    padding: 15px;
+    border-bottom: 5px solid #fff;
+}
+.MultiFile-remove {
+    border:1px solid;
+    padding: 3px 10px;
+    background: #F5F5F5;
+}
+.MultiFile-title {
+    text-rendering: optimizelegibility;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0px 0px 0px 10px;
+    width: 210px;
+    display: inline-block;
+    margin: 0px 0px -6px 0px;
+}
+
+/*
+************************
+    Modal
+************************
+*/
+button {
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 400;
+    color: #fff;
+    border: 0;
+    outline: 0;
+    background: #ee4c50;
+    cursor: pointer;
+    display: block;
+}
+
+button:hover {
+  background: #444;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    font-weight: 400;
+    padding: 4em 1em 1em 1em;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+    width: 400px;
+    z-index: 1000;
+    background: #fff;
+    box-shadow: 0 0 0 1000em rgba(0,0,0,.5);
+}
+
+.modal.active {
+  display: block;
+}
+
+.modal .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.prevent {
+  pointer-events: none;
+}
+
+.prevent .modal {
+  pointer-events: auto;
 }
